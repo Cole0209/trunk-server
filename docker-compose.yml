@@ -10,9 +10,9 @@ services:
     networks:
       - proxy
     ports:
-      - "80:80"
-      - "443:443"
-      - "5602:5602"
+      - "56080:80"
+      - "56443:443"
+      - "56602:5602"
     restart: always
     volumes:
       - /root/trunk-server/data/log/syslog:/var/log/syslog
