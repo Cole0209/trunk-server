@@ -1,4 +1,3 @@
-version: "3"
 services:
   nginx:
     build:
@@ -16,10 +15,10 @@ services:
       - "5602:5602"
     restart: always
     volumes:
-      - ${PWD}/data/log/syslog:/var/log/syslog
-      - ${PWD}/data/log/nginx:/var/log/nginx
-      - ${PWD}/data/certbot/www/:/var/www/certbot/:ro
-      - ${PWD}/data/certbot/conf/:/etc/letsencrypt/:ro
+      - /root/trunk-server/data/log/syslog:/var/log/syslog
+      - /root/trunk-server/data/log/nginx:/var/log/nginx
+      - /root/trunk-server/data/certbot/www/:/var/www/certbot/:ro
+      - /root/trunk-server/data/certbot/conf/:/etc/letsencrypt/:ro
     depends_on:
       - backend
       - frontend 
@@ -30,8 +29,8 @@ services:
   certbot:
     image: certbot/certbot:latest
     volumes:
-      - ${PWD}/data/certbot/www/:/var/www/certbot/:rw
-      - ${PWD}/data/certbot/conf/:/etc/letsencrypt/:rw
+      - /root/trunk-server/data/certbot/www/:/var/www/certbot/:rw
+      - /root/trunk-server/data/certbot/conf/:/etc/letsencrypt/:rw
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
     logging:
       driver: syslog
@@ -48,7 +47,7 @@ services:
       - PRO_PLAN_ARCHIVE
     image: "mongo:${TAG}-${STAGE}"
     volumes:
-      - ${PWD}/data/mongo:/data/db
+      - /root/trunk-server/data/mongo:/data/db
     networks:
       - node
     restart: always
@@ -88,7 +87,7 @@ services:
       - HONEYCOMB_API_KEY
     volumes:
       - "~/.aws:/home/app/.aws"
-      - ${PWD}/data/stats:/data/stats
+      - /root/trunk-server/data/stats:/data/stats
     depends_on:
       - mongo
     ports:
